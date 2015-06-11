@@ -4,6 +4,7 @@ class ChainNode
 {
 	friend class Chain;
 public:
+	ChainNode() :next(NULL), data(){}
 	ChainNode(Student data) : next(NULL){
 		this->data = data;
 	}

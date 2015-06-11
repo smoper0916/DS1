@@ -23,12 +23,14 @@ ChainNode* Chain::getBig(Student s){
 }
 void Chain::insertData(Student data)
 {
-	if (!head)
-		head = tail = new ChainNode(data);
-	else if (data < head->getData()){ // head 교체
+	if (!tail){
+		tail = new ChainNode(data);
+		head->next = tail;
+	}
+	else if (head->next && data < head->next->getData()){ // head 교체
 		ChainNode* tmp = new ChainNode(data);
-		tmp->next = head;
-		head = tmp;
+		tmp->next = head->next;
+		head->next = tmp;
 	}
 	else{
 		tail->next = new ChainNode(data);
@@ -37,7 +39,7 @@ void Chain::insertData(Student data)
 }
 void Chain::insertData(Student frontData, Student data)
 {
-	if (!head)
+	if (!tail)
 		std::cout << "Can't Found Data" << endl;
 	else{
 		ChainNode* current = NULL;
@@ -50,13 +52,13 @@ void Chain::insertData(Student frontData, Student data)
 
 		midNode->next = current->next;
 		current->next = midNode;
-		if (current == tail)
+		if (!midNode->next)
 			tail = midNode;
 	}
 }
 void Chain::deleteData(int stdN)
 {
-	ChainNode* previous = NULL;
+	ChainNode* previous = head;
 	ChainNode* current;
 	bool isRight = false;
 	for (current = begin(); current != end(); current = current->next){
@@ -70,24 +72,17 @@ void Chain::deleteData(int stdN)
 	if (!isRight)
 		cerr << "옳지 않은 학번입니다." << endl;
 	else{
-		if (head == tail){ // 원소가 1개
-			delete head;
-			head = tail = NULL;
-		}
-		else if (!previous){
-			ChainNode* tmp = head->next;
-			delete head;
-			head = tmp;
-		}
-		else if (current == tail){
+		if (head->next == tail){
 			previous->next = NULL;
 			delete tail;
-			tail = previous;
+			tail = previous->next;
 		}
 		else{
 			previous->next = current->next;
 			current->next = NULL;
 			delete current;
+			if (!previous->next)
+				tail = previous;
 		}
 	}
 }

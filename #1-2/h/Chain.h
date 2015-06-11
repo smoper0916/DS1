@@ -6,8 +6,8 @@
 class Chain
 {
 public:
-	Chain(){ tail = head = nullptr; }
-	ChainNode* begin() { return head; }
+	Chain(){ head = new ChainNode(); head->next = tail = NULL; }
+	ChainNode* begin() { return head->next; }
 	ChainNode* end() { return NULL; }
 	ChainNode* getBig(Student s);
 	ChainNode* getHead(){ return head; }
