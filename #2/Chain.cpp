@@ -1,16 +1,10 @@
 #include "Chain.h"
 
 Chain& Chain::operator=(Chain& c){
-	ChainNode* currA = begin();
-	ChainNode* currB = c.begin();
-	while (true){
-		if (!currB)
-			break;
-		currA = new ChainNode(*currB);
+	head = new ChainNode();
 
-		currA = currA->next;
-		currB = currB->next;
-	}
+	head->next = c.head->next;
+
 	return *this;
 }
 
