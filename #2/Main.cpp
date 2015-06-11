@@ -22,7 +22,13 @@ int main()
 
 	cout << "두번째 다항식을 계수-지수 쌍으로 입력하세요.(지수가 0으로 입력되면 종료)" << endl;
 	p2.getArray();
-	if (p.getTerms() == 0 || p2.getTerms() == 0)
+
+	int pTerms = 0; int p2Terms = 0;
+	Chain x = p.getChain(); Chain y = p2.getChain();
+	for (ChainNode* n = x.begin(); n != x.end(); n = n->getNext(), pTerms++);
+	for (ChainNode* n = y.begin(); n != y.end(); n = n->getNext(), p2Terms++);
+
+	if (pTerms == 0 || p2Terms == 0)
 	{
 		cout << "항이 0개입니다. 곱할 수 없습니다." << endl;
 		return 0;
@@ -33,21 +39,26 @@ int main()
 std::ostream& operator<<(std::ostream& os, Polynomial& p)
 {
 	string result = "";
-	for (int i = 0; i < p.terms; i++)
+
+	int terms = 0;
+	int i = 0;
+	Chain x = p.getChain();
+	for (ChainNode* n = x.begin(); n != x.end(); n = n->getNext(), terms++);
+	for (ChainNode* n = x.begin(); n != x.end(); n = n->getNext(), i++)
 	{
-		if (p.termLinkedList[i].coef != 0)
+		if (n->getData().coef != 0)
 		{
-			if (p.termLinkedList[i].coef != 1)
-				result += parseString(p.termLinkedList[i].coef);
-			else if (p.termLinkedList[i].coef == -1)
+			if (n->getData().coef != 1)
+				result += parseString(n->getData().coef);
+			else if (n->getData().coef == -1)
 				result += "-";
 
-			if (p.termLinkedList[i].exp == 1)
+			if (n->getData().exp == 1)
 				result += "x";
-			else if (p.termLinkedList[i].exp != 0)
-				result += "x^" + parseString(p.termLinkedList[i].exp);
+			else if (n->getData().exp != 0)
+				result += "x^" + parseString(n->getData().exp);
 		}
-		if (i != p.terms - 1)
+		if (i != terms - 1)
 			result += "+";
 	}
 	if (result[result.length() - 1] == '+')
