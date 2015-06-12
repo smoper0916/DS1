@@ -22,24 +22,7 @@ void Chain::insertNode(ChainNode* front, ChainNode* curr)
 	}
 }
 
-bool Chain::deleteNode(ChainNode* curr)
+void Chain::deleteNode(ChainNode* curr)
 {
-	if (head->right == head)
-		return false;
-	else{
-		ChainNode* target = head->right;
-		target = target->right;
-		
-		while (target->right == head){
-			if (target == curr){
-				target->left = target->right;
-				target->right->left = target->right;
-				target->left->right = target->right;
-				delete curr;
-				return true;
-			}
-			target = target->right;
-		}
-		return false;
-	}
+
 }
