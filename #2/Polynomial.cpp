@@ -2,22 +2,13 @@
 using namespace std;
 
 
-Polynomial::Polynomial(const Polynomial& p)
-{
-	terms = p.terms;
-	capacity = p.capacity;
-	termLinkedList = new Term[capacity];
-	for (int i = 0; i < terms; i++)
-		termLinkedList[i] = p.termLinkedList[i];
+Polynomial::Polynomial(Polynomial& p)
+{	
+	termLinkedList = p.getChain();
 }
-Polynomial& Polynomial::operator=(const Polynomial& p)
+Polynomial Polynomial::operator=(Polynomial& p)
 {
-	terms = p.terms;
-	capacity = p.capacity;
-	delete[] termLinkedList; // 기존 것 제거
-	termLinkedList = new Term[capacity];
-	for (int i = 0; i < terms; i++)
-		termLinkedList[i] = p.termLinkedList[i];
+	termLinkedList = p.getChain();
 	return *this;
 }
 Polynomial Polynomial::getAdd(Polynomial& b)
@@ -77,28 +68,30 @@ Polynomial Polynomial::getMultiply(Polynomial& b)
 	Polynomial c;
 	if (aCount > bCount)
 	{
+		int bPosCnt = 0;
 		while (bPos != bTermList.end())
 		{
-			for (aPos = 0; aPos < terms; aPos++)
-				tmp[bPos].NewTerm(termLinkedList[aPos].coef * b.termLinkedList[bPos].coef, termLinkedList[aPos].exp + b.termLinkedList[bPos].exp);
-			bPos++;
+			for (aPos = aTermList.begin(); aPos != aTermList.end(); aPos = aPos->next)
+				tmp[bPosCnt].getChain().insertData(Term(aPos->getData().coef * bPos->getData().coef, aPos->getData().exp + bPos->getData().exp));
+			bPosCnt++; bPos = bPos->next;
 		}
 		if (bCount >= 1)
 		{
-			for (int i = 0; i < b.terms; i++)
+			for (int i = 0; i < bCount; i++)
 				c = tmp[i].getAdd(c);
 		}
 	}
 	else {
-		while (aPos < terms)
+		int aPosCnt = 0;
+		while (aPos != aTermList.end())
 		{
-			for (bPos = 0; bPos < b.terms; bPos++)
-				tmp[aPos].NewTerm(termLinkedList[aPos].coef * b.termLinkedList[bPos].coef, termLinkedList[aPos].exp + b.termLinkedList[bPos].exp);
-			aPos++;
+			for (bPos = bTermList.begin(); bPos != bTermList.end(); bPos = bPos->next)
+				tmp[aPosCnt].getChain().insertData(Term(aPos->getData().coef * bPos->getData().coef, aPos->getData().exp + bPos->getData().exp));
+			aPosCnt++; aPos = aPos->next;
 		}
-		if (terms >= 1)
+		if (aCount >= 1)
 		{
-			for (int i = 0; i < terms; i++)
+			for (int i = 0; i < aCount; i++)
 				c = tmp[i].getAdd(c);
 		}
 	}

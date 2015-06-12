@@ -13,9 +13,9 @@ private:
 public:
 	/* 생성자 */
 	Polynomial(){}
-	Polynomial(const Polynomial&); // 복사생성자
+	Polynomial(Polynomial&); // 복사생성자
 
-	Polynomial& operator=(const Polynomial&); // '=' 연산자 오버로딩
+	Polynomial operator=(Polynomial&); // '=' 연산자 오버로딩
 
 	/* Functions */
 	void getArray();
